@@ -143,7 +143,7 @@
     </style>
 </head>
 <body>
-    <div id="sync-status">🔄 Připojování k databázi...</div>
+    <div id="sync-status">🔄 Landogy database Connecting...</div>
 
     <div class="left-col">
         <h2 style="font-size: 2.2em; text-align: left; text-transform: uppercase;">YOU ARE SPINNING FOR DAY:</h2>
@@ -180,7 +180,7 @@
         <button class="btn btn-namelist" onclick="toggleNameList()">NAME<br>LIST</button>
         
         <div id="edit-names-container" style="display: none; text-align: left; background: white; border: 2px solid black; padding: 10px; margin-top: 10px;">
-            <label style="font-weight: bold; font-size: 0.9em; display:block; margin-bottom: 5px;">Upravit jména v kole:</label>
+            <label style="font-weight: bold; font-size: 0.9em; display:block; margin-bottom: 5px;">Edit names:</label>
             <textarea id="name-input-area"></textarea>
             <button class="save-btn" onclick="saveNames()">SAVE</button>
         </div>
@@ -231,18 +231,18 @@
             names = data.names || [];
             historyObj = data.historyObj || [];
         }
-        document.getElementById('sync-status').innerText = "✅ Online (Synchronizováno)";
+        document.getElementById('sync-status').innerText = "✅Online";
         updateHistoryUI();
         drawWheel();
     });
 
     function saveStateToFirebase() {
-        document.getElementById('sync-status').innerText = "🔄 Ukládám...";
+        document.getElementById('sync-status').innerText = "🔄 Saving...";
         dbRef.set({
             names: names,
             historyObj: historyObj
         }).then(() => {
-            document.getElementById('sync-status').innerText = "✅ Online (Synchronizováno)";
+            document.getElementById('sync-status').innerText = "✅ Online";
         });
     }
 
@@ -328,7 +328,7 @@
         let alreadySelected = historyObj.some(item => item.date === targetDateStr);
         
         if (alreadySelected) {
-            alert("⚠️ Pozor: Pro tento den (" + targetDateStr + ") už byl prezentující vybrán! Prosím, překlikni si šipkami na jiný datum.");
+            alert("⚠️ Alert: For this date (" + targetDateStr + ") is presenter already picked. Please choose another date.");
             return;
         }
 
@@ -415,7 +415,7 @@
     }
 
     function resetWheel() {
-        if(confirm("Opravdu chcete vyresetovat kolo a smazat historii? Všichni budou vráceni do osudí.")) {
+        if(confirm("Do you really want to restart the picker? Everyone will be taken back to the wheel")) {
             historyObj = [];
             names = ["Lukáš", "Veronika", "Lucia", "František", "Dominik", "Marina", "Peter K.", "Hendrik", "Ersin", "Jakub K", "Jakub D", "Tereza", "Iveta", "Marek", "Martin", "Ondřej"];
             saveStateToFirebase(); 
