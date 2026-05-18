@@ -317,27 +317,43 @@
     const centerY = 275;
     const radius = 265; 
 
-    dbRef.on('value', (snapshot) => {
+   dbRef.on(
+    'value',
+    (snapshot) => {
         const data = snapshot.val();
+
         if (data) {
             names = data.names || [];
             historyObj = data.historyObj || [];
         }
+
         document.getElementById('sync-status').innerText = "✅ Online";
         updateHistoryUI();
-        updateManualSelect(); 
+        updateManualSelect();
         drawWheel();
-    });
-
-    function saveStateToFirebase() {
-        document.getElementById('sync-status').innerText = "🔄 Saving...";
-        dbRef.set({
-            names: names,
-            historyObj: historyObj
-        }).then(() => {
-            document.getElementById('sync-status').innerText = "✅ Online";
-        });
+    },
+    (error) => {
+        console.error("Firebase read error:", error);
+        document.getElementById('sync-status').innerText =
+            "❌ Firebase error: " + error.code;
     }
+);
+    function saveStateToFirebase() {
+    document.getElementById('sync-status').innerText = "🔄 Saving...";
+
+    dbRef.set({
+        names: names,
+        historyObj: historyObj
+    })
+    .then(() => {
+        document.getElementById('sync-status').innerText = "✅ Online";
+    })
+    .catch((error) => {
+        console.error("Firebase save error:", error);
+        document.getElementById('sync-status').innerText =
+            "❌ Save error: " + error.code;
+    });
+}
 
     function updateManualSelect() {
         let select = document.getElementById('manual-pick-select');
